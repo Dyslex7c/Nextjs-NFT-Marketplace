@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import Link from "next/link";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -28,6 +29,33 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <div>
+      <nav className="border-b p-6">
+        <p className="text-4xl font-bold">Metaverse Marketplace</p>
+        <div className="flex mt-4">
+          <Link href="/" legacyBehavior>
+            <a className="mr-6 text-blue-500">
+              Home
+            </a>
+          </Link>
+          <Link href="/create-item" legacyBehavior>
+            <a className="mr-6 text-blue-500">
+              Sell Digital Asset
+            </a>
+          </Link>
+          <Link href="/my-assets" legacyBehavior>
+            <a className="mr-6 text-blue-500">
+              My Digital Assets
+            </a>
+          </Link>
+          <Link href="/creator-dashboard" legacyBehavior>
+            <a className="mr-6 text-blue-500">
+              Creator Dashboard
+            </a>
+          </Link>
+        </div>
+      </nav>
+    </div>
         {children}
       </body>
     </html>
