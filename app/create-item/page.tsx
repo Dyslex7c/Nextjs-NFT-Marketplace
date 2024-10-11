@@ -2,13 +2,9 @@
 
 import { useState } from "react";
 import { ethers } from "ethers";
-import { create as ipfsHttpClient } from "ipfs-http-client";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import Web3modal from 'web3modal';
-
-const pinataApiKey = '3b2e9485d3d6c51ec593';
-const pinataSecretApiKey = '55ae1f11787102239d47de16abfa3b4d85aeaff15907ba38b9f2892479fb56a8';
 
 import { nftaddress, nftmarketaddress } from "@/nftmarket.config";
 
@@ -33,8 +29,8 @@ export default function CreateItem() {
                 maxContentLength: Infinity,
                 headers: {
                     'Content-Type': `multipart/form-data`,
-                    pinata_api_key: pinataApiKey,
-                    pinata_secret_api_key: pinataSecretApiKey,
+                    pinata_api_key: process.env.NEXT_PUBLIC_PINATA_API_KEY,
+                    pinata_secret_api_key: process.env.NEXT_PUBLIC_PINATA_SECRET_API_KEY,
                 },
             });
 
@@ -43,29 +39,24 @@ export default function CreateItem() {
 
         } catch (err) {
             console.log(err);
-            
         }
     }
 
     async function createItem() {        
         const { name, description, price} = formInput;
-        console.log(name);
-        console.log(description);
-        console.log(price);
-        console.log(fileUrl);
-        
-             
         if (!name || !description || !price || !fileUrl) return;        
 
         const data = JSON.stringify({
             name, description, image: fileUrl
         });
 
+        console.log(data);
+
         try {
             const res = await axios.post('https://api.pinata.cloud/pinning/pinJSONToIPFS', data, {
                 headers: {
-                    pinata_api_key: pinataApiKey,
-                    pinata_secret_api_key: pinataSecretApiKey,
+                    pinata_api_key: process.env.NEXT_PUBLIC_PINATA_API_KEY,
+                    pinata_secret_api_key: process.env.NEXT_PUBLIC_PINATA_SECRET_API_KEY,
                 },
             });
 

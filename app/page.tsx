@@ -39,15 +39,17 @@ export default function Home() {
     const items = await Promise.all(data.map(async (i: any) => {
       const tokenUri = await tokenContract.tokenURI(i.tokenId);
       const meta = await axios.get(tokenUri);
+      console.log(meta.data);
+      
       let price = ethers.utils.formatUnits(i.price.toString(), 'ether');
       let item = {
         price,
         tokenId: i.tokenId.toNumber(),
         seller: i.seller,
         owner: i.owner,
-        image: meta.data.image,
-        name: meta.data.name,
-        description: meta.data.description,
+        image: JSON.parse(Object.keys(meta.data)[0]).image,
+        name: JSON.parse(Object.keys(meta.data)[0]).name,
+        description: JSON.parse(Object.keys(meta.data)[0]).description,
       };
       return item;
     }))
@@ -79,6 +81,9 @@ export default function Home() {
       No items in the marketplace
     </h1>
   )
+
+  console.log(nfts);
+  
 
   return (
     <div className="flex justify-center">
