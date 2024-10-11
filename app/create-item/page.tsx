@@ -1,12 +1,14 @@
 "use client"
 
 import { useState } from "react";
-import { ethers, Signer } from "ethers";
+import { ethers } from "ethers";
 import { create as ipfsHttpClient } from "ipfs-http-client";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 import Web3modal from 'web3modal';
 
-const client = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0');
+const pinataApiKey = '3b2e9485d3d6c51ec593';
+const pinataSecretApiKey = '55ae1f11787102239d47de16abfa3b4d85aeaff15907ba38b9f2892479fb56a8';
 
 import { nftaddress, nftmarketaddress } from "@/nftmarket.config";
 
@@ -24,10 +26,19 @@ export default function CreateItem() {
         if (!file) return;
 
         try {
-            const added = await client.add(file, {
-                progress: (prog) => console.log(`received ${prog}`)
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const res = await axios.post('https://api.pinata.cloud/pinning/pinFileToIPFS', formData, {
+                maxContentLength: Infinity,
+                headers: {
+                    'Content-Type': `multipart/form-data`,
+                    pinata_api_key: pinataApiKey,
+                    pinata_secret_api_key: pinataSecretApiKey,
+                },
             });
-            const url = `https://ipfs.infura.io/ipfs/${added.path}`;
+
+            const url = `https://gateway.pinata.cloud/ipfs/${res.data.IpfsHash}`;
             setFileUrl(url);
 
         } catch (err) {
@@ -36,18 +47,30 @@ export default function CreateItem() {
         }
     }
 
-    async function createItem() {
+    async function createItem() {        
         const { name, description, price} = formInput;
-        if (!name || !description || !price || !fileUrl) return;
+        console.log(name);
+        console.log(description);
+        console.log(price);
+        console.log(fileUrl);
+        
+             
+        if (!name || !description || !price || !fileUrl) return;        
 
         const data = JSON.stringify({
             name, description, image: fileUrl
         });
 
         try {
-            const added = await client.add(data);
-            const url = `https://ipfs.infura.io/ipfs/${added.path}`;
-            createSale(url)
+            const res = await axios.post('https://api.pinata.cloud/pinning/pinJSONToIPFS', data, {
+                headers: {
+                    pinata_api_key: pinataApiKey,
+                    pinata_secret_api_key: pinataSecretApiKey,
+                },
+            });
+
+            const url = `https://gateway.pinata.cloud/ipfs/${res.data.IpfsHash}`;
+            createSale(url);
 
         } catch (err) {
             console.log(err);
@@ -61,9 +84,12 @@ export default function CreateItem() {
         const signer = provider.getSigner();
 
         let contract = new ethers.Contract(nftaddress, NFT.abi, signer);
+        console.log(contract);
+        
         let transaction = await contract.createToken(url);
         let tx = await transaction.wait();
-
+        console.log(tx);
+        
         let event = tx.events[0];
         let value = event.args[2];
         let tokenId = value.toNumber();
@@ -96,7 +122,7 @@ export default function CreateItem() {
                 <input
                     placeholder="Asset Price"
                     className="mt-2 border rounded p-4 bg-black"
-                    onChange={event => updateFormInput({ ...formInput, name: event.target.value})}
+                    onChange={event => updateFormInput({ ...formInput, price: event.target.value})}
                 />
                 <input 
                     type="file"
