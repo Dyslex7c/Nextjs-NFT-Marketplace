@@ -77,7 +77,7 @@ export default function Home() {
   }
 
   if (loadingState === 'loaded' && !nfts.length) return (
-    <h1 className="px-20 py-10 text-3xl">
+    <h1 className="px-20 py-10 text-3xl" style={{fontFamily: "Poppins"}}>
       No items in the marketplace
     </h1>
   )
@@ -91,20 +91,22 @@ export default function Home() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
           {
             nfts.map((nft, i) => (
-              <div key={i} className="border-shadow rounded-xl overflow-hidden">
+              <div key={i} className="border-shadow bg-black rounded-xl overflow-hidden">
                 <img src={nft.image} />
                 <div className="p-4">
-                  <p style={{height: '64px'}} className="text-2xl font-semibold">
+                  <p style={{height: '64px', fontFamily: "Poppins"}} className="text-2xl font-semibold">
                     {nft.name}
                   </p>
                   <div style={{height: '70px', overflow: 'hidden' }}>
-                    <p className="text-gray-400">
+                    <p className="text-gray-400 italic">
                       {nft.description}
                     </p>
                   </div>
                   <div className="p-4 bg-black">
-                    <p className="text-2xl mb-4 font-bold text-white">{nft.price} ETH</p>
-                    <button className="w-full bg-blue-500 text-white font-bold py-2 px-12 rounded"
+                    <p className="mb-4 text-white" style={{fontFamily: "Noto Sans", fontWeight: 200}}><span className="text-3xl">{nft.price}</span> ETH</p>
+                    <button
+                    className="w-full bg-blue-800 hover:bg-white hover:text-black transition-colors duration-300 text-white py-2 px-12 rounded"
+                    style={{fontFamily: "Poppins", fontWeight: 500}}
                     onClick={() => buyNft(nft)}>
                       Buy
                     </button>

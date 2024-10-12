@@ -118,7 +118,7 @@ export default function CreateItem() {
                 <input 
                     type="file"
                     name="Asset"
-                    className="my-4 bg-black"
+                    className="my-4"
                     onChange={onChange}
                 />
                 {
@@ -128,7 +128,8 @@ export default function CreateItem() {
                 }
                 <button
                     onClick={createItem}
-                    className="font-bold mt-4 bg-blue-500 text-white rounded p-4 shadow-lg"
+                    className="mt-4 bg-blue-800 hover:bg-white hover:text-black transition-colors duration-300 text-white rounded p-4 shadow-lg"
+                    style={{fontFamily: "Poppins", fontWeight: 500}}
                 >
                     Create Digital Asset
                 </button>

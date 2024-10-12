@@ -34,22 +34,22 @@ export default function RootLayout({
         <p className="text-4xl font-bold">Metaverse Marketplace</p>
         <div className="flex mt-4">
           <Link href="/" legacyBehavior>
-            <a className="mr-6 text-blue-500">
+            <a className="mr-6 text-blue-400" style={{fontFamily: "Poppins"}}>
               Home
             </a>
           </Link>
           <Link href="/create-item" legacyBehavior>
-            <a className="mr-6 text-blue-500">
+            <a className="mr-6 text-blue-400" style={{fontFamily: "Poppins"}}>
               Sell Digital Asset
             </a>
           </Link>
           <Link href="/my-assets" legacyBehavior>
-            <a className="mr-6 text-blue-500">
+            <a className="mr-6 text-blue-400" style={{fontFamily: "Poppins"}}>
               My Digital Assets
             </a>
           </Link>
           <Link href="/creator-dashboard" legacyBehavior>
-            <a className="mr-6 text-blue-500">
+            <a className="mr-6 text-blue-400" style={{fontFamily: "Poppins"}}>
               Creator Dashboard
             </a>
           </Link>
